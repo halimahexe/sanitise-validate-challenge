@@ -1,6 +1,6 @@
 function home(posts) {
-  const title = "All posts";
-  const content = /*html*/ `
+	const title = 'All posts';
+	const content = /*html*/ `
     <h2>New post</h2>
     <form method="POST">
       <p>
@@ -15,25 +15,32 @@ function home(posts) {
     </form>
     <h2>All posts</h2>
     <ul>
-      ${posts.map(postItem).join("")}
+      ${posts.map(postItem).join('')}
     </ul>
   `;
-  return layout(title, content);
+	return layout(title, content);
+}
+
+function sanitise(unsafeInput) {
+	const safe = unsafeInput.replaceAll('<', `&lt;`);
+	return safe;
 }
 
 function postItem(post) {
-  const date = new Date(post.created);
-  const prettyDate = date.toLocaleString("en-GB");
-  return `
+	const date = new Date(post.created);
+	const prettyDate = date.toLocaleString('en-GB');
+	const sanitisedMessage = sanitise(post.message);
+	const sanitisedNickname = sanitise(post.nickname);
+	return `
     <li>
-      <p>${post.message}</p>
-      <p>—${post.nickname} | ${prettyDate}</p>
+      <p>${sanitisedMessage}</p>
+      <p>—${sanitisedNickname} | ${prettyDate}</p>
     </li>
   `;
 }
 
 function layout(title, content) {
-  return /*html*/ `
+	return /*html*/ `
     <!doctype html>
     <html>
       <head>
