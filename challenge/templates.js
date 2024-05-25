@@ -1,15 +1,21 @@
-function home(posts) {
+function home(posts, errors = {}, requests = {}) {
 	const title = 'All posts';
 	const content = /*html*/ `
     <h2>New post</h2>
     <form method="POST">
       <p>
         <label for="nickname">Nickname</label>
-        <input id="nickname" name="nickname">
+        <input id="nickname" name="nickname" value="${
+					requests.nickname ? sanitise(requests.nickname) : ''
+				}">
+        ${validate(errors.nickname)}
       </p>
       <p>
         <label for="message">Message</label>
-        <textarea id="message" name="message"></textarea>
+        <textarea id="message" name="message" value="${
+					requests.message ? sanitise(requests.message) : ''
+				}"></textarea>
+        ${validate(errors.message)}
       </p>
       <button>Send</button>
     </form>
@@ -22,8 +28,13 @@ function home(posts) {
 }
 
 function sanitise(unsafeInput) {
-	const safe = unsafeInput.replaceAll('<', `&lt;`);
-	return safe;
+	return unsafeInput.replaceAll('<', `&lt;`);
+}
+
+function validate(message) {
+	if (message) {
+		return `<span style="color: red">${message}</span>`;
+	} else return '';
 }
 
 function postItem(post) {
